@@ -1,0 +1,147 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Preamble
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm,fullpage}
+\usepackage[a4paper,bindingoffset=0in,left=1in,right=1in,top=1in,
+bottom=1in,footskip=0in]{geometry}
+\newtheorem*{prop}{Proposition}
+%\newcounter{Examplecount}
+%\setcounter{Examplecount}{0}
+\newenvironment{discussion}{\noindent Discussion.}{}
+\pagenumbering{gobble}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Heading
+%\title{CS21 Midterm}
+%\author{Matt Lim}
+%\date{February 12, 2014}
+%\maketitle
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 1
+\section*{Problem 1, CS21 Set 5, Matt Lim}
+\begin{description}
+    \item[(a)] False. To prove this we must find a language L that has the
+        following properties: L $\in$ EXP and L $\notin$ TIME$(2^{n^{100}}$).
+        To find this L, we will use the Time Hierarchy Theorem. Consider
+        the proper complexity function $f(n) = 2^{n^{100}} \ge n$. Then we
+        have that $f(2n)^{3} = (2^{2n^{100}})^{3}$. So we have that, by
+        the Time Hierarchy Theorem,
+        TIME($2^{n^{100}}$) $\subsetneq$ TIME($(2^{2n^{100}})^{3}$) $\subseteq$
+        EXP. This means that we can choose an L that is in
+        TIME($(2^{2n^{100}})^{3}$) (and thus in EXP) that is not in
+        TIME($2^{n^{100}}$). This proves (a) to be false.
+
+    \item[(b)] True. This is because we showed in lecture that P $\subsetneq$
+        EXP, which means that either P $\neq$ NP or NP $\neq$ EXP (or both).
+    \item[(c)] False. Since, due to the problem, we can assume that an
+        NP-complete language has an $O(n^{k})$-time algorithm for some fixed
+        $k$, we have that NP = P. So then we can do the following.
+        To prove this we must find a language L that is in P
+        but not in TIME($n^{k}$). To find this L, we will use the Time Hierarchy
+        Theorem. Consider the proper complexity function $f(n) = n^{k}$. Then
+        we have that $f(2n)^{3} = (2n)^{3k}$. So we have that, by the Time
+        Hierarchy Theorem, TIME($n^{k}$) $\subsetneq$ TIME($(2n)^{3k}$)
+        $\subseteq$ P. This means that we can choose an L that is in
+        TIME($(2n)^{3k}$) (and thus in P) that is not in TIME($n^{k}$). This
+        proves (c) to be false.
+    \item[(d)] False. Consider the language L = $\Sigma ^{*}$. This language is
+        clearly in P (everything is accepted) and thus in NP. To be NP-complete,
+        every language A in NP
+        must reduce to L. But we cannot reduce any language A in NP to L because
+        it is impossible to map no to no, since L does not have any instances of
+        no to map to. Thus L is not NP-complete, yet is in NP. So (d) is false.
+    \item[(e)] True. This is because NP $\subseteq$ EXP. So since every
+        EXP-complete language has the characteristic that every language
+        A $\in$ EXP reduces to it, and since we have that NP $\subseteq$ EXP and
+        thus that every language in NP is in EXP, we can conclude that every
+        language in NP reduces to every EXP-complete language.
+\end{description}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 2
+\section*{Problem 2, CS21 Set 5, Matt Lim}
+To show
+\[ \text{3-COLORABLE} = \{G : G \text{ is 3-colorable}\} \]
+is NP-complete, we must show that it is in NP and that all NP-problems are
+polynomial time reducible to it. The first part is easy; a certificate is simply
+a 3-colorable graph. To prove the second part, we show that 3-SAT is polynomial
+time reducible to 3-COLORABLE. The following details the reduction.
+
+Our reduction function $f$ will map a 3-CNF formula $\varphi$ to a graph $G$.
+The graph will look as follows:
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Problem 3
+\section*{Problem 3, CS21 Set 5, Matt Lim}
+To show that (3,3)-SAT is NP-complete, we must show that it is in NP and that
+all NP-problems are polynomial time reducible to it. The first part is easy;
+a certificate is simply a CNF formula with at most 3 literals per clause, and
+at most 3 occurrences of any variable. To prove the second part, we show that
+3-SAT is polynomial time reducible to (3,3)-SAT. The following details the
+reduction.
+
+Our reduction function $f$ will map a 3-CNF formula $\varphi$ to a new 3-CNF
+formula $\varphi_{2}$. If $\varphi$ itself has at most 3 occurrences of any
+variable, then we can just make $\varphi_{2}$ a copy of $\varphi$. Else, if
+$\varphi$ has more than 3 occurrences of any variable, we can do the following
+thing to each of these variables.
+
+Let an arbitrary variable $r$ repeat $n > 3$ times. Then we will introduce
+$n$ new variables $y_{1}, y_{2}, \dots , y_{n}$. We want all the $y_{i}$s to
+be equivalent to each. That is, we want $y_{1} \Leftrightarrow y_{2}
+\Leftrightarrow \dots \Leftrightarrow y_{n}$. To get this, it suffices to show
+that $y_{1} \Rightarrow y_{2} \Rightarrow \dots \Rightarrow y_{n} \Rightarrow
+y_{1}$. To do this in CNF format, it will look like the following:
+\[ (y_{2} \vee \overline{y_{1}}) \wedge (y_{3} \vee \overline{y_{2}})
+\wedge \dots (y_{1} \vee \overline{y_{n}}) \]
+Then, we will add the above clauses to $\varphi$ (separated by $\wedge$s), and
+replace each $i$th instance of $r$ with $y_{i}$.
+
+Now we will show that this reduction function $f$ maps yes to yes and no
+to no. First we will show it maps yes to yes. So, given that $\varphi$ has a
+satisfying assignment, we want to show that $\varphi_{2}$ is satisfiable
+and that it is in (3,3)-SAT. To do this, we will consider our reduction
+function. Note that for any arbitrary variable $r$ repeated $n > 3$ times, our
+reduction function adds new variables $y_{1}, y_{2}, \dots , y_{n}$, each of
+which appear twice (once in the added clauses, once in the replacements).
+Note that the complement of each $y_{i}$ appears once. Now
+we must consider what happens if $\neg r$ repeats $k > 3$ times as well. That
+is, both $r$ and $\neg r$ repeat more than three times. If this is the case,
+then we can first do the replacements for whichever variable repeats more.
+So, WLOG, consider the case where $r$ repeats more. Then we will have
+$y_{1} \Leftrightarrow y_{2} \Leftrightarrow \dots \Leftrightarrow y_{n}$.
+Since we have this, we also have that $\overline{y_{1}} \Leftrightarrow
+\overline{y_{2}} \Leftrightarrow \dots \Leftrightarrow \overline{y_{n}}$. Thus,
+to replace our $\overline{r}$s, we can simply replace each $i$th instance
+of $\overline{r}$ with $\overline{y_{i}}$. Then we have that we have added
+an instance of each $\overline{y_{i}}$, bringing the total number of each one
+up to two. So, we have that our reduction function gives us a $\varphi_{2}$
+that has at most 3 literals per clause and at most 3 occurrences of each
+variable. Now we must show that it is satisfiable to complete the proof of
+yes maps to yes. To prove this, we must only show that our added clauses
+are satisfiable, since our replacement method does not change the
+satisfiability of the original clauses (since all the replacements for a
+given repeated variable are equivalent). This is clearly true, since we can
+just either make all the $y_{i}$'s to be true or all of them to be false.
+So we have that yes maps to yes.
+
+Now we will show that this reduction function $f$ maps no to no. To prove this,
+consider again the fact that our replacement method does not change the
+satisfiability of the original clauses (since all the replacements for a given
+repeated variable are equivalent). Thus, the non-added-in clauses in
+$\varphi_{2}$ are unsatisfiable. And adding in the extra clauses can do nothing
+to change this, since all the clauses are separated by $\wedge$s. So we have
+that no maps to no.
+
+Now we must only prove that our reduction function $f$ is polynomial time
+computable. A variable can repeat no more than $3n$ times, where $n$ is the number
+of clauses. And there can be no more than $3n$ repeated variables. This means
+that for each repeated variable, we do no more than $3n$ replacements, and
+add no more than $3n + 1$ clauses. Clearly the function is polynomial.
+So we have that our reduction function is polynomial.
+\newpage
+\end{document}
+
+
+
